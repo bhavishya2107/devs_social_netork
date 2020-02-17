@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const logger = require('morgan')
 
+
 const users = require('./routes/api/users')
 const profile = require('./routes/api/profile')
 const posts = require('./routes/api/posts')
@@ -9,7 +10,7 @@ const posts = require('./routes/api/posts')
 require('dotenv').config()
 
 const PORT = process.env.PORT || 5000
-
+// process.env.mongoURI
 
 //connect to mongodb
 mongoose.connect("mongodb://localhost/devs", {
@@ -20,10 +21,6 @@ mongoose.connect("mongodb://localhost/devs", {
 })
 
 const app = express()
-
-app.get('/', (req, res) => {
-  res.send('Hello')
-})
 
 //Use Routes
 app.use(logger('dev'));
