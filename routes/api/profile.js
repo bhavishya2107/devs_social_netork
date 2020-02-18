@@ -178,4 +178,12 @@ router.delete('/education/:edu_id', auth.verifyToken, (req, res) => {
 })
 
 
+//delete profile and user
+router.delete('/', auth.verifyToken, async (req, res) => {
+  var profile = await Profile.findOneAndDelete({ user: req.user.id })
+  var user = await User.findOneAndDelete({ _id: req.user.id })
+
+  res.json({ success: true, msg: "Profile/User deleted successfully" })
+})
+
 module.exports = router;
