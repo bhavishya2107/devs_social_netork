@@ -26,7 +26,7 @@ router.get('/', auth.verifyToken, async (req, res) => {
 router.get('/all', async (req, res) => {
   const errors = {}
   try {
-    var allProfiles = await Profile.find({})
+    var allProfiles = await Profile.find({}).populate('user')
     if (!allProfiles) {
       errors.noprofile = "There are no profiles"
       res.status(404).json(errors)
@@ -71,8 +71,13 @@ router.get('/:user_id', async (req, res) => {
 
 //create profile
 router.post('/', auth.verifyToken, async (req, res) => {
+  console.log(req.user)
   try {
     var userProfile = await Profile.create(req.body)
+    var user = await User.findById(req.user.id)
+    if (!user.profileId) {
+      await User.findByIdAndUpdate(req.user.id, { profileId: userProfile.id }, { new: true })
+    }
     userProfile.user = req.user.id
     userProfile.skills = req.body.skills.split(',')
     userProfile.save()

@@ -7,7 +7,7 @@ img {
   background: url('./img/showcase.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  height: 87vh;
+  height: 100vh;
   margin-top: -24px;
   margin-bottom: -50px;
 }
@@ -36,4 +36,20 @@ img {
 
 .form-control::placeholder {
   color: #bbb !important;
+}
+
+.register {
+  min-height: 87vh;
+}
+
+.login {
+  min-height: 79.3vh;
+}
+
+.profile-div {
+  min-height: 100vh;
+}
+
+.dashboard {
+  min-height: 100vh;
 }

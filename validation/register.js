@@ -33,6 +33,10 @@ module.exports = function validateRegisterInput(data) {
     errors.password2 = "Passwords must match"
   }
 
+  if (Validator.isEmpty(data.password2)) {
+    errors.password2 = "Passwords must match"
+  }
+
 
   return {
     errors,

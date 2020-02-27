@@ -49,6 +49,21 @@ router.post('/login', async (req, res) => {
   res.json({ success: true, token })
 })
 
+//get current user
+router.get('/current', auth.verifyToken, async (req,res) => {
+  var user = req.user.id
+  try {
+    var currentUser = await User.findById(user).populate('profileId')
+    if(!currentUser) {
+      return res.json({msg:"Invalid userId"})
+    }
+    res.json({success:true, currentUser})
+  } catch (error) {
+    res.status(400).json({msg:"user not found", error})
+  }
+
+})
+
 
 
 

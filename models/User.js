@@ -4,6 +4,10 @@ var gravatar = require('gravatar');
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
+  profileId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Profile'
+  },
   name: {
     type: String,
     required: true
@@ -12,7 +16,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    match:/@/
+    match: /@/
   },
   avatar: {
     type: String
@@ -42,7 +46,7 @@ userSchema.pre('save', async function (next) {
 })
 
 //verify pw
-userSchema.methods.verifyPassword = async function(password) {
+userSchema.methods.verifyPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
