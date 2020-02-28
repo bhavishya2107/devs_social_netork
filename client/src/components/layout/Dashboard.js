@@ -103,20 +103,21 @@ class Dashboard extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state.loginUserData && this.state.loginUserData.currentUser.profileId.experience.map(exp => {
-                        return <tr>
-                          <td>{exp.company}</td>
-                          <td>{exp.title}</td>
-                          <td>
-                            {new Date(exp.from).getFullYear()} - {(!exp.current) ? new Date(exp.to).getFullYear() : "Now"}
-                          </td>
-                          <td>
-                            <button onClick={() => this.handleDelete(exp._id)} className="btn btn-danger">
-                              Delete
-                     </button>
-                          </td>
-                        </tr>
-                      })}
+                    {(this.state.loginUserData && this.state.loginUserData.currentUser.profileId) ?  this.state.loginUserData && this.state.loginUserData.currentUser.profileId.experience.map(exp => {
+                      return <tr>
+                        <td>{exp.company}</td>
+                        <td>{exp.title}</td>
+                        <td>
+                        {new Date(exp.from).getMonth() + '/' + new Date(exp.from).getFullYear()} - {(!exp.current) ? new Date(exp.to).getMonth() + '/' + new Date(exp.to).getFullYear() : "Now"}
+                        </td>
+                        <td>
+                          <button onClick={() => this.handleDelete(exp._id)} className="btn btn-danger">
+                            Delete
+                   </button>
+                        </td>
+                      </tr>
+                    }) : null }
+                     
                     </tbody>
                   </table>
                 </div>
@@ -132,20 +133,21 @@ class Dashboard extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.state.loginUserData && this.state.loginUserData.currentUser.profileId.education.map(edu => {
-                        return <tr>
-                          <td>{edu.school}</td>
-                          <td>{edu.degree}</td>
-                          <td>
-                            {new Date(edu.from).getMonth() + '/' + new Date(edu.from).getFullYear()} - {(!edu.current) ? new Date(edu.to).getMonth() + '/' + new Date(edu.to).getFullYear() : "Now"}
-                          </td>
-                          <td>
-                            <button onClick={() => this.handleDeleteEducation(edu._id)} className="btn btn-danger">
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      })}
+                    {(this.state.loginUserData && this.state.loginUserData.currentUser.profileId) ? this.state.loginUserData && this.state.loginUserData.currentUser.profileId.education.map(edu => {
+                      return <tr>
+                        <td>{edu.school}</td>
+                        <td>{edu.degree}</td>
+                        <td>
+                          {new Date(edu.from).getMonth() + '/' + new Date(edu.from).getFullYear()} - {(!edu.current) ? new Date(edu.to).getMonth() + '/' + new Date(edu.to).getFullYear() : "Now"}
+                        </td>
+                        <td>
+                          <button onClick={() => this.handleDeleteEducation(edu._id)} className="btn btn-danger">
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    }) : null }
+                    
                     </tbody>
                   </table>
                 </div>

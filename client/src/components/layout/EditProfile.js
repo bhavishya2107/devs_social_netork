@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from './Footer'
 import LoginNavbar from './LoginNavbar'
-import Axios from 'axios'
+import axios from 'axios'
 
 class EditProfile extends Component {
   constructor() {
@@ -20,7 +20,8 @@ class EditProfile extends Component {
       facebook: null,
       linkedin: null,
       instagram: null,
-      status: null
+      status: null,
+      updating: false
     }
   }
 
@@ -28,7 +29,8 @@ class EditProfile extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  editProfile = () => {
+  createProfile = (e) => {
+    e.preventDefault()
     const newProfile = {
       handle: this.state.handle,
       company: this.state.company,
@@ -44,12 +46,40 @@ class EditProfile extends Component {
       instagram: this.state.instagram,
       status: this.state.status
     }
-    console.log(newProfile)
+    axios.post('/api/profile', newProfile, {
+      headers: {
+        "Authorization": localStorage.token,
+        "Content-Type": "application/json"
+      }
+    }).then(profile => console.log(profile))
+      .catch(err => console.log(err))
+  }
+
+  componentDidMount() {
+    axios.get(`/api/profile/${this.props.user && this.props.user.currentUser._id}`)
+    .then(user => 
+      this.setState({
+      handle: user.data.handle,
+      company: user.data.company,
+      website: user.data.website,
+      location: user.data.location,
+      skills: user.data.skills,
+      bio: user.data.bio,
+      githubUsername: user.data.githubUsername,
+      youtube: user.data.youtube,
+      twitter: user.data.twitter,
+      facebook: user.data.facebook,
+      linkedin: user.data.linkedin,
+      instagram: user.data.instagram,
+      status: user.data.status
+    }))
   }
 
 
-  render() {
 
+
+
+  render() {
     return (
       <div>
         {
@@ -63,7 +93,7 @@ class EditProfile extends Component {
                   Go Back
                 </Link>
                 <h1 className="display-4 text-center mb-5">Edit Your Profile</h1>
-                <form>
+                <form onSubmit={this.createProfile}>
                   <div className="form-group">
                     <input type="text" className="form-control form-control-lg" placeholder="* Profile handle" name="handle" value={this.state.handle} onChange={this.onChange}
                     />
