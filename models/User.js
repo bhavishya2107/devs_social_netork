@@ -24,11 +24,15 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  post: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
+  }]
 }, { timestamps: true })
 
 userSchema.pre('save', async function (next) {
-  user = this
+  var user = this
   if (user.password && user.isModified('password')) {
     console.log(user.password)
     user.password = await bcrypt.hash(user.password, 10)

@@ -23,6 +23,7 @@ class Login extends Component {
       .then(user => {
         if (user.data.success) {
           localStorage.setItem('token', user.data.token)
+          localStorage.setItem('id', user.data.id)
           window.location.href = '/dashboard'
         }
       })

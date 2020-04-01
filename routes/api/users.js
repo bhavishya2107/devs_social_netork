@@ -46,14 +46,14 @@ router.post('/login', async (req, res) => {
   }
   //generate JWT
   var token = await auth.generateJWT(user);
-  res.json({ success: true, token })
+  res.json({ success: true, token , id:user._id })
 })
 
 //get current user
 router.get('/current', auth.verifyToken, async (req,res) => {
   var user = req.user.id
   try {
-    var currentUser = await User.findById(user).populate('profileId')
+    var currentUser = await User.findById(user).populate('profileId post')
     if(!currentUser) {
       return res.json({msg:"Invalid userId"})
     }

@@ -8,7 +8,8 @@ class Profiles extends Component {
   constructor() { 
     super();
     this.state = {
-      userData: []
+      userData: [],
+      userProfile:null
     }
   }
 
@@ -23,7 +24,6 @@ class Profiles extends Component {
 
 
   render() {
-    console.log(this.state.userData, 'data')
     return (
       <div>
         <Navbar />
@@ -44,7 +44,7 @@ class Profiles extends Component {
                         <h3>{dev.user.name}</h3>
                         <p>{dev.company}</p>
                         <p>{dev.location}</p>
-                        <Link to='/user-profile' className="btn btn-info">View Profile</Link>
+                        <Link to='/user-profile' onClick={() => this.props.getUserData(dev.user._id)} className="btn btn-info">View Profile</Link>
                       </div>
                       <div className="col-md-4 d-none d-lg-block">
                         <h4>Skill Set</h4>

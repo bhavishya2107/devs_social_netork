@@ -26,7 +26,13 @@ router.get('/', auth.verifyToken, async (req, res) => {
 router.get('/all', async (req, res) => {
   const errors = {}
   try {
-    var allProfiles = await Profile.find({}).populate('user')
+    var allProfiles = await Profile.find({})
+    .populate({ 
+      path: 'user',
+      populate: {
+        path: 'post'
+      } 
+   })
     if (!allProfiles) {
       errors.noprofile = "There are no profiles"
       res.status(404).json(errors)

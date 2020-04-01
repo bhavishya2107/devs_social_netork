@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
-import LoginNavbar from './LoginNavbar'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import React, { Component } from "react";
+import LoginNavbar from "./LoginNavbar";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 class AddExperience extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       title: null,
       company: null,
@@ -14,11 +15,11 @@ class AddExperience extends Component {
       to: null,
       description: null,
       current: false
-    }
+    };
   }
 
-  addExperienceToLoginUser = (e) => {
-    e.preventDefault()
+  addExperienceToLoginUser = e => {
+    e.preventDefault();
     // let to = (this.state.current) ? "Now" : this.state.to
     const newExp = {
       title: this.state.title,
@@ -28,101 +29,161 @@ class AddExperience extends Component {
       to: this.state.to,
       description: this.state.description,
       current: this.state.current
-    }
-    axios.post('/api/profile/experience', newExp, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": localStorage.token
-      }
-    })
-      .then(addedExp => (addedExp.data) ?  window.location.href = '/dashboard' : null)
-      .catch(err => console.log(err)) 
-  }
+    };
+
+    axios
+      .post("/api/profile/experience", newExp, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.token
+        }
+      })
+      .then(addedExp => {
+        if (addedExp.data) {
+          toast.success("Experience Added ", {
+            position: toast.POSITION.TOP_RIGHT
+          });
+        } else {
+          return null;
+        }
+      })
+      .then(u => (window.location.href = "/dashboard"))
+      .catch(err =>
+        toast.error("Experience Not Added ", {
+          position: toast.POSITION.TOP_RIGHT
+        })
+      );
+  };
 
   render() {
     return (
       <div>
-        {
-          (localStorage.token) ? <LoginNavbar /> : ""
-        }
+        {localStorage.token ? <LoginNavbar /> : ""}
         <div className="section add-experience">
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
-                <Link to='/dashboard' className="btn btn-light">
+                <Link to="/dashboard" className="btn btn-light">
                   Go Back
-          </Link>
-                <h1 className="display-4 text-center mb-5">Add Your Experience</h1>
+                </Link>
+                <h1 className="display-4 text-center mb-5">
+                  Add Your Experience
+                </h1>
                 <form onSubmit={this.addExperienceToLoginUser}>
                   <div className="form-group">
-                    <input type="text" className="form-control form-control-lg" placeholder="* Job Title" name="title" value={this.state.title}
-                      onChange={(e) => {
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="* Job Title"
+                      name="title"
+                      value={this.state.title}
+                      onChange={e => {
                         this.setState({
                           title: e.target.value
-                        })
-                      }} />
+                        });
+                      }}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="text" className="form-control form-control-lg" placeholder="* Company" name="company" value={this.state.company}
-                      onChange={(e) => {
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="* Company"
+                      name="company"
+                      value={this.state.company}
+                      onChange={e => {
                         this.setState({
                           company: e.target.value
-                        })
-                      }} />
+                        });
+                      }}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="text" className="form-control form-control-lg" placeholder="Location" name="location" value={this.state.location}
-                      onChange={(e) => {
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="Location"
+                      name="location"
+                      value={this.state.location}
+                      onChange={e => {
                         this.setState({
                           location: e.target.value
-                        })
-                      }} />
+                        });
+                      }}
+                    />
                   </div>
                   <h6>From Date</h6>
                   <div className="form-group">
-                    <input type="date" className="form-control form-control-lg" name="from"
+                    <input
+                      type="date"
+                      className="form-control form-control-lg"
+                      name="from"
                       value={this.state.from}
-                      onChange={(e) => {
+                      onChange={e => {
                         this.setState({
                           from: e.target.value
-                        })
-                      }} />
+                        });
+                      }}
+                    />
                   </div>
                   <h6>To Date</h6>
                   <div className="form-group">
-                    <input type="date" className="form-control form-control-lg" name="to"
-                      onChange={(e) => {
+                    <input
+                      type="date"
+                      className="form-control form-control-lg"
+                      name="to"
+                      onChange={e => {
                         this.setState({
                           to: e.target.value
-                        })
-                      }} />
+                        });
+                      }}
+                    />
                   </div>
                   <div className="form-check mb-4">
-                    <input className="form-check-input" type="checkbox" name="current" checked={this.state.current} onClick={() => {
-                      this.setState({
-                        current: !this.state.current
-                      })
-                    }} id="current" />
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="current"
+                      checked={this.state.current}
+                      onClick={() => {
+                        this.setState({
+                          current: !this.state.current
+                        });
+                      }}
+                      id="current"
+                    />
                     <label className="form-check-label" htmlFor="current">
                       Current Job
                     </label>
                   </div>
                   <div className="form-group">
-                    <textarea className="form-control form-control-lg" placeholder="Job Description" name="description" value={this.state.description} onChange={(e) => {
-                      this.setState({
-                        description: e.target.value
-                      })
-                    }}></textarea>
-                    <small className="form-text text-muted">Some of your responsabilities, etc</small>
+                    <textarea
+                      className="form-control form-control-lg"
+                      placeholder="Job Description"
+                      name="description"
+                      value={this.state.description}
+                      onChange={e => {
+                        this.setState({
+                          description: e.target.value
+                        });
+                      }}
+                    ></textarea>
+                    <small className="form-text text-muted">
+                      Some of your responsabilities, etc
+                    </small>
                   </div>
-                  <input type="submit" className="btn btn-info btn-block mt-4" />
+                  <input
+                    type="submit"
+                    className="btn btn-info btn-block mt-4"
+                  />
                 </form>
               </div>
             </div>
           </div>
         </div>
+        <ToastContainer autoClose={3000} />
       </div>
-    )
+    );
   }
 }
 

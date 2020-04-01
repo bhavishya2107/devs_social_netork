@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const auth = require('../../modules/auth')
 const router = express.Router()
 const Profile = require('../../models/Profile')
+const User = require('../../models/User')
 const Post = require('../../models/Post')
 
 const validatePostInput = require('../../validation/post')
@@ -12,7 +13,7 @@ const validatePostInput = require('../../validation/post')
 router.get('/', async (req, res) => {
   try {
     var post = await Post.find()
-      .populate('user', ['name', 'email', '_id'])
+      .populate('user','-post -password')
       .sort({ data: -1 })
     if (!post) return res.json({ error: "No post found" })
     res.json({ success: true, post })
@@ -54,13 +55,14 @@ router.delete('/:id', auth.verifyToken, async (req, res) => {
 router.post('/', auth.verifyToken, async (req, res) => {
   //validation
   const { errors, isValid } = validatePostInput(req.body)
-
   if (!isValid) {
     return res.status(400).json(errors)
   }
   try {
+    req.body.name = req.user.name
+    req.body.user = req.user.id
     var post = await Post.create(req.body)
-    post.user = req.user.id
+    await User.findByIdAndUpdate(req.user.id, {$push:{post: { $each: [`${post.id}`], $position: 0 }}})
     res.json(post)
   } catch (error) {
     res.json({ msg: "error in query" })

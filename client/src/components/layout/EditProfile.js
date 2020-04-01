@@ -55,28 +55,58 @@ class EditProfile extends Component {
       .catch(err => console.log(err))
   }
 
-  componentDidMount() {
-    axios.get(`/api/profile/${this.props.user && this.props.user.currentUser._id}`)
-    .then(user => 
-      this.setState({
-      handle: user.data.handle,
-      company: user.data.company,
-      website: user.data.website,
-      location: user.data.location,
-      skills: user.data.skills,
-      bio: user.data.bio,
-      githubUsername: user.data.githubUsername,
-      youtube: user.data.youtube,
-      twitter: user.data.twitter,
-      facebook: user.data.facebook,
-      linkedin: user.data.linkedin,
-      instagram: user.data.instagram,
-      status: user.data.status
-    }))
+  updateProfile = (e) => {
+    e.preventDefault()
+    const newProfile = {
+      handle: this.state.handle,
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      skills: this.state.skills,
+      bio: this.state.bio,
+      githubUsername: this.state.githubUsername,
+      youtube: this.state.youtube,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      instagram: this.state.instagram,
+      status: this.state.status
+    }
+    axios.put('/api/profile', newProfile, {
+      headers: {
+        "Authorization": localStorage.token,
+        "Content-Type": "application/json"
+      }
+    }).then(profile => console.log(profile))
+      .catch(err => console.log(err))
   }
 
-
-
+  componentDidMount() {
+    axios.get(`/api/profile/${this.props.user && this.props.user.currentUser._id}`)
+      .then(user => {
+        this.setState({
+          handle: user.data.handle,
+          company: user.data.company,
+          website: user.data.website,
+          location: user.data.location,
+          skills: user.data.skills,
+          bio: user.data.bio,
+          githubUsername: user.data.githubUsername,
+          youtube: user.data.youtube,
+          twitter: user.data.twitter,
+          facebook: user.data.facebook,
+          linkedin: user.data.linkedin,
+          instagram: user.data.instagram,
+          status: user.data.status
+        })
+        if(user.data.handle || user.data.company) {
+          this.setState({
+            updating: true
+          })
+        }
+      }
+      )
+  }
 
 
   render() {
@@ -93,7 +123,8 @@ class EditProfile extends Component {
                   Go Back
                 </Link>
                 <h1 className="display-4 text-center mb-5">Edit Your Profile</h1>
-                <form onSubmit={this.createProfile}>
+
+                <form onSubmit={!this.state.updating ? this.createProfile : this.updateProfile}>
                   <div className="form-group">
                     <input type="text" className="form-control form-control-lg" placeholder="* Profile handle" name="handle" value={this.state.handle} onChange={this.onChange}
                     />

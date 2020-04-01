@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import { ToastContainer, toast } from "react-toastify"
 
 class Landing extends Component {
+
   render() {
     return (
       <div>
@@ -23,7 +25,6 @@ class Landing extends Component {
               </div>
             </div>
           </div>
-
         </div>
         <Footer />
       </div>
