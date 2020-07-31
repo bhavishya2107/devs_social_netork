@@ -1,34 +1,29 @@
-import React, { Component } from 'react'
-import Navbar from '../layout/Navbar'
-import axios from 'axios'
-
+import React, { Component } from "react";
+import Navbar from "../layout/Navbar";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { signInDeveloper } from "../../store/actions";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: '',
-      errors: {}
-    }
+      email: "",
+      password: "",
+      errors: {},
+    };
   }
 
   onSubmit = (e) => {
-    e.preventDefault()
+    const { dispatch, history } = this.props;
+    e.preventDefault();
     const newUser = {
       email: this.state.email,
-      password: this.state.password
-    }
-    axios.post('/api/users/login', newUser)
-      .then(user => {
-        if (user.data.success) {
-          localStorage.setItem('token', user.data.token)
-          localStorage.setItem('id', user.data.id)
-          window.location.href = '/dashboard'
-        }
-      })
-      .catch(err => console.log(err.response.data))
-  }
+      password: this.state.password,
+    };
+    dispatch(signInDeveloper(newUser, history));
+  };
 
   render() {
     return (
@@ -41,32 +36,50 @@ class Login extends Component {
                 <h1 className="display-4 text-center">Login</h1>
 
                 <form onSubmit={this.onSubmit}>
-
                   <div className="form-group">
-                    <input type="email" className="form-control form-control-lg" placeholder="Email Address" name="email"
-                      value={this.state.email} onChange={(e) => {
+                    <input
+                      type="email"
+                      className="form-control form-control-lg"
+                      placeholder="Email Address"
+                      name="email"
+                      value={this.state.email}
+                      onChange={(e) => {
                         this.setState({
-                          email: e.target.value
-                        })
-                      }} />
+                          email: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="password" className="form-control form-control-lg" placeholder="Password" name="password"
-                      value={this.state.password} onChange={(e) => {
+                    <input
+                      type="password"
+                      className="form-control form-control-lg"
+                      placeholder="Password"
+                      name="password"
+                      value={this.state.password}
+                      onChange={(e) => {
                         this.setState({
-                          password: e.target.value
-                        })
-                      }} />
+                          password: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
-                  <input type="submit" className="btn btn-info btn-block mt-4" />
+                  <input
+                    type="submit"
+                    className="btn btn-info btn-block mt-4"
+                  />
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Login;
+let mapStateToProps = ({ developer }) => {
+  return { developer };
+};
+
+export default connect(mapStateToProps)(withRouter(Login));
