@@ -21,7 +21,7 @@ class App extends React.Component {
     this.state = {
       currentUserData: null,
       userProfile: null,
-      post: null
+      post: null,
     };
   }
 
@@ -30,45 +30,45 @@ class App extends React.Component {
       .get("/api/users/current", {
         headers: {
           Authorization: localStorage.token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(current =>
+      .then((current) =>
         this.setState({
-          currentUserData: current.data
+          currentUserData: current.data,
         })
       )
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }
 
-  getUserProfile = id => {
+  getUserProfile = (id) => {
     axios
       .get(`/api/profile/${id}`, {
         headers: {
           Authorization: localStorage.token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(profile =>
+      .then((profile) =>
         this.setState({
-          userProfile: profile.data
+          userProfile: profile.data,
         })
       );
   };
 
-  getCommentById = id => {
+  getCommentById = (id) => {
     axios
       .get(`/api/posts/${id}`, {
         headers: {
           Authorization: localStorage.token,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-      .then(userPost =>
+      .then((userPost) =>
         this.setState({
-          post: userPost
+          post: userPost,
         })
       );
   };
